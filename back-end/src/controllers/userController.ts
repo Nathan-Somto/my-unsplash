@@ -81,8 +81,13 @@ class userController {
       res.json({ err });
     }
   }
-  user_photo_get(req: Request, res: Response) {
-    res.json({ message: "gets all the photo for a specified user" });
+ async user_photo_get(req: Request, res: Response) {
+    let photoData = await userModel.findOne({username: req.params.username}).populate("photos","-_id").select("photos");
+    console.log(photoData);
+    if(!photoData) return res.status(401).json({message: "no photos for user"});
+    const {_doc}: any = photoData;
+    res.status(200).json({ ..._doc});
+    
   }
   async user_photo_post(req: Request, res: Response) {
     if(!req.body) res.status(401).json({message:"no data provided"});

@@ -11,5 +11,5 @@ let photoSchema = new Schema<IPhoto>({
     url:{type:String, required: true},
     user:{type:Schema.Types.ObjectId, ref:"User"}
 })
-export let photoModel = model("Photo",photoSchema);
+export let photoModel = model("Photos",photoSchema);
 
