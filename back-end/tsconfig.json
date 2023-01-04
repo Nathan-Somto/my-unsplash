@@ -1,0 +1,15 @@
+{
+    "extends":"@tsconfig/node16/tsconfig.json",
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "module": "commonJS",
+        "target": "es6", 
+        "allowJs": true,   
+        "moduleResolution": "node",
+      },
+    "include":["src/**/*.ts", "app.ts"],
+    "exclude": ["node_modules"],
+    "ts-node": {
+        "esm": true
+    }
+}
