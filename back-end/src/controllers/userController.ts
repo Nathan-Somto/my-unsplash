@@ -119,4 +119,5 @@ class userController {
     res.json({ message: user });
   }
 }
+
 export default userController;

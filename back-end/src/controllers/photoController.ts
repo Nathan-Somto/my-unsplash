@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import Joi from "joi";
 import { photoModel } from "../models/photoModel";
 class photoController {
     async photos_all_get(req:Request,res:Response){
@@ -7,8 +6,11 @@ class photoController {
         res.json({photo:photos});
     }
 
-    photo_search(req:Request, res:Response){
-        res.json({message:"search for a particular image"})
+    async photo_search(req:Request, res:Response){
+        let photos = await photoModel.findOne({title:req.params.title}).select('-_id');
+        if(!photos) return res.status(400).json({message:"no photo exists"});
+        const{_doc}:any = photos; 
+        res.status(200).json({..._doc})
     }
 
 }

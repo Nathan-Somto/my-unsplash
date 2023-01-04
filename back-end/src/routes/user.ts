@@ -2,7 +2,8 @@
 import { Router } from "express";
 // imported controllers
 import userController from "../controllers/userController";
-import auth from '../middlewares/auth'
+import auth from '../middlewares/auth';
+import confirmDelete from "../middlewares/confirmDelete";
 // user object to access the userController class
 const user = new userController();
 const router = Router();
@@ -19,6 +20,7 @@ router.get('/:username',(req,res)=>user.userInfo(req,res));
 
 // route handlers for user photos 
 router.post('/photo/:username',(req,res)=>user.user_photo_post(req,res));
+router.use('/photo/:username',confirmDelete);
 router.delete('/photo/:username',(req,res)=> user.user_photo_delete(req,res));
 
 export default router;
