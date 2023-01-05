@@ -7,9 +7,8 @@ type Props = {}
 export default function Home({}: Props) {
 const [photo , setPhoto] = useState<any>([]);
 useEffect(()=>{
-  let data: any = getPhotos().then( data => setPhoto([...data.photo]));
-  console.log(data);
-  //setPhoto([...data]);
+  getPhotos().then( data => setPhoto([...data.photo])).catch(err => setPhoto(false));
+  
 
 },[])
   
@@ -28,5 +27,5 @@ useEffect(()=>{
       </figure>)}</div>
       }</div>
     </>
-  )
+    )  
 }
