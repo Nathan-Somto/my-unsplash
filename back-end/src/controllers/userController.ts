@@ -24,7 +24,7 @@ class userController {
         username: userData.username,
         email: userData.email,
       });
-      res.status(200).json(token);
+      res.status(200).json({token: token});
     } catch (err) {
       return res.json({ error });
     }
