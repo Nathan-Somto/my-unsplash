@@ -14,9 +14,14 @@ export default function login({}: Props):JSX.Element {
     password: "",
   });
   const Navigate = useNavigate();
-  function handleChange(e: any): void {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+  let handleChange : (e:React.ChangeEvent<HTMLInputElement>)=> void;
+  handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    if(e.target){ 
+    setFormData({
+      ...formData,
+      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement).value
+    });
+  }}
   function handleRedirect():void{
     Navigate('/');
     console.log('clicked')
@@ -55,7 +60,7 @@ export default function login({}: Props):JSX.Element {
               className="p-2 w-full border-black/50 focus:border-black border-solid border"
             />
           </div>
-          <Button styles={'bg-black text-white w-full py-3 mt-4 rounded-md'}>{"Login"}</Button>
+          <Button styles={' w-full '}>{"Login"}</Button>
           <div className="mt-8 text-center">Don't have an account?  <Link to={'/register'} className='underline text-black/50'>Join Unsplash</Link></div>
         </form>
       </section>
