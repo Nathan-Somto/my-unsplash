@@ -115,7 +115,7 @@ class userController {
   }
   async userInfo(req: Request, res: Response) {
     let username = req.params.username;
-    const user = await userModel.findOne({ username });
+    const user = await userModel.findOne({ username }).populate('photos');
     res.json({ message: user });
   }
 }
