@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import {Link , useNavigate }  from 'react-router-dom';
 import Button from "../components/Button";
+import authUser from "../services/authUser";
 import logo from "../assets/unsplash_logo.svg";
+import { UserContext } from "../App";
 type Props = {};
 type stateObj = {
   email: string;
@@ -13,6 +15,7 @@ export default function login({}: Props):JSX.Element {
     email: "",
     password: "",
   });
+  const currentUser: any = useContext(UserContext);
   const Navigate = useNavigate();
   let handleChange : (e:React.ChangeEvent<HTMLInputElement>)=> void;
   handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -26,6 +29,21 @@ export default function login({}: Props):JSX.Element {
     Navigate('/');
     console.log('clicked')
   }
+  function handleSubmit(e:any){
+    e.preventDefault();
+    // validate the form
+    authUser(formData,'login').then(data => {
+      if(data){
+      currentUser.setUser(data)
+      Navigate(`/profile/${data}`)
+      }
+      Navigate('/login');
+    }
+      ).catch(err => {
+        currentUser.setUser(err)
+        Navigate('/login');
+      });
+  }
   return (
     <>
       <section className="flex  flex-col items-center  min-h-screen ">
@@ -35,7 +53,7 @@ export default function login({}: Props):JSX.Element {
           <h1 className="text-bold text-3xl font-bold mb-4">Login</h1>
           <h3>Welcome back</h3>
         </div>
-        <form className="mt-12 p-4 w-3/4 mx-auto mb-0 max-w-xl min-w-fit" onSubmit={(e)=> e.preventDefault()}>
+        <form className="mt-12 p-4 w-3/4 mx-auto mb-0 max-w-xl min-w-fit" onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label htmlFor="email" className="block mt-4 mb-2 ">
               Email
@@ -53,7 +71,7 @@ export default function login({}: Props):JSX.Element {
               Password
             </label>
             <input
-              type={"text"}
+              type={"password"}
               name="name"
               onChange={handleChange}
               id="password"

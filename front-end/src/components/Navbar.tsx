@@ -1,23 +1,28 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/unsplash_logo.svg";
+import Button from "./Button";
+import { UserContext } from "../App";
 export default function Navbar() {
+  const currentUser: any = useContext(UserContext);
   return (
-    <nav className="flex w-full h-24 p-4">
-      <div className='ml-3'>
+    <nav className="flex items-center justify-between w-full h-24 p-4">
+      <div className=' sm:ml-3'>
         <img src={logo} alt="my-unsplash logo" />
       </div>
-      <div className=" w-3/4 sm:w-2/4">
+      <div className=" w-4/6 sm:w-2/4">
         <input
           type={"text"}
           placeholder="search unsplash"
-          className="ml-7 w-full  p-3 rounded-3xl
-           transition ease-in  border-solid border-black/50
-            outline-black bg-gray-200 focus:border-gray-500/50"
+          className=" w-full  p-3 rounded-3xl
+           transition ease-in border border-solid border-gray-400
+            outline-black bg-gray-200 focus:border-gray-600"
         />
       </div>
-      <div className="flex lg:hidden">
+      <div className="relative  bottom-0 left-0 flex justify-center items-center md:hidden ">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="w-6 h-6 mx-auto my-0"
+      className="w-6 h-6 mx-auto my-0 justify-self-end"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -30,6 +35,20 @@ export default function Navbar() {
       />
     </svg>
   </div>
+  {
+    !currentUser.user && 
+    <div className=' hidden md:block '>
+    <Link to={'/login'} className='mr-2'>Login</Link>
+    <Link to={'/register'}>Register</Link>
+    </div>
+  }
+   {
+    currentUser.user && 
+    <div className=' hidden md:block '>
+    <Link to={'/login'} className='mr-4'>{currentUser.user}</Link>
+    <Button styles={'py-1  px-2'}>{'Logout'}</Button>
+    </div>
+  }
     </nav>
   );
 }
