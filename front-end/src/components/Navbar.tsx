@@ -5,6 +5,11 @@ import Button from "./Button";
 import { UserContext } from "../App";
 export default function Navbar() {
   const currentUser: any = useContext(UserContext);
+  function handleLogout(){
+    localStorage.removeItem('token');
+    console.log('clicked');
+    window.location.reload(false);
+  }
   return (
     <nav className="flex items-center justify-between w-full h-24 p-4">
       <div className=' sm:ml-3'>
@@ -45,8 +50,8 @@ export default function Navbar() {
    {
     currentUser.user && 
     <div className=' hidden md:block '>
-    <Link to={'/login'} className='mr-4'>{currentUser.user}</Link>
-    <Button styles={'py-1  px-2'}>{'Logout'}</Button>
+    <Link to={`/profile/${currentUser.user}`} className='mr-4'>{currentUser.user}</Link>
+    <Button styles={'py-1  px-2'} OnClick={handleLogout}>{'Logout'}</Button>
     </div>
   }
     </nav>

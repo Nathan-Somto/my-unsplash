@@ -6,18 +6,16 @@ type Props = {};
 
 export default function Home({}: Props) {
   const [photo, setPhoto] = useState<any>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     getPhotos()
       .then((data) => setPhoto([...data.photo]))
-      .catch((err) => setPhoto(false)).finally((dat) => setLoading(false));
+      .catch((err) => setPhoto(false));
   }, []);
 
   return (
     <>
       <Navbar />
       <div className="w-full mt-14  columns-2 sm:columns-2 gap-4 lg:columns-3 ">
-        {loading &&<div>loading...</div>}
         {photo && (
           <div>
             {photo.map((item: any, index: number) => (

@@ -15,12 +15,12 @@ router.get('/me', auth,(req,res)=>{
     res.json({_id, username});
     }
 })
-router.get('/photo/:username',(req,res)=>user.user_photo_get(req,res));
-router.get('/:username',(req,res)=>user.userInfo(req,res));
+router.get('/photo/:username',auth,(req,res)=>user.user_photo_get(req,res));
+router.get('/:username',auth,(req,res)=>user.userInfo(req,res));
 
 // route handlers for user photos 
-router.post('/photo/:username',(req,res)=>user.user_photo_post(req,res));
-router.use('/photo/:username',confirmDelete);
-router.delete('/photo/:username',(req,res)=> user.user_photo_delete(req,res));
+router.post('/photo/:username',auth,(req,res)=>user.user_photo_post(req,res));
+router.use('/photo/:username/:photoId',confirmDelete);
+router.delete('/photo/:username/:photoId',auth,(req,res)=> user.user_photo_delete(req,res));
 
 export default router;

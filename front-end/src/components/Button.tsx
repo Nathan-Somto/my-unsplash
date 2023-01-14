@@ -5,7 +5,7 @@ type Props = {
   styles?: string;
   disabled?: boolean;
   type?: string;
-  onClick?: () => void;
+  OnClick?: () => void;
 };
 
 const Button = ({
@@ -13,10 +13,10 @@ const Button = ({
   styles = "",
   disabled = false,
   type = "submit",
-  onClick,
+  OnClick,
 }: Props) => {
   return (
-    <button className={"bg-black text-white py-3 mt-4 rounded-md " + styles} disabled={disabled} onClick={onClick}>
+    <button className={"bg-black text-white py-3 mt-4 rounded-md " + styles} disabled={disabled} onClick={OnClick}>
       {children}
     </button>
   );

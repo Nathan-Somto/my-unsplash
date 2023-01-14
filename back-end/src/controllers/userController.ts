@@ -32,8 +32,7 @@ class userController {
   validateLoginUser(user: Request) {
     const schema = Joi.object({
       email: Joi.string().min(11).max(100).email().required(),
-      password: Joi.string().min(8).required(),
-      repeat_password: Joi.ref("password"),
+      password: Joi.string().min(8).required()
     });
     return schema.validate(user);
   }
@@ -43,8 +42,7 @@ class userController {
       last_name: Joi.string().min(3).max(50).required(),
       username: Joi.string().alphanum().min(3).max(30).required(),
       email: Joi.string().min(11).max(100).email().required(),
-      password: Joi.string().min(8).max(255).required(),
-      repeat_password: Joi.ref("password"),
+      password: Joi.string().min(8).max(255).required()
     });
     return schema.validate(user);
   }
@@ -110,12 +108,17 @@ class userController {
     const {_doc}: any = updatedPhoto;
     res.json({ ..._doc});
   }
-  user_photo_delete(req: Request, res: Response) {
-    res.json({message: "deletes a user photo" });
+  async user_photo_delete(req: Request, res: Response) {
+    let {username, photoId} = req.params;
+    let userData =  await userModel.updateOne({username}, {
+      $pull :{'photos':{_id : photoId}}
+    });
+    let photoData = await photoModel.findByIdAndDelete(photoId);                                                                                                                         
+    res.json({userData});
   }
   async userInfo(req: Request, res: Response) {
     let username = req.params.username;
-    const user = await userModel.findOne({ username }).populate('photos');
+    const user = await userModel.findOne({ username }).select(['-email','-password']).populate('photos');
     res.json({ message: user });
   }
 }

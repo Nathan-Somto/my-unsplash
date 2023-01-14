@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route  } from "react-router-dom";
+import jwtdecode from "jwt-decode";
 import Home from "./pages/Home";
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -18,9 +19,12 @@ function App() {
   useEffect(()=>{
       const token = localStorage.getItem('token')
       if(token){
-        console.log(token)
+        const user:any = jwtdecode(token  as string);
+         setUser(user.username);
+        
         // decode the token 
         // set the user state to username
+
       }
       console.log(token);
     
@@ -42,3 +46,7 @@ function App() {
 }
 
 export default App;
+function jwt_decode(arg0: string): any {
+  throw new Error("Function not implemented.");
+}
+
