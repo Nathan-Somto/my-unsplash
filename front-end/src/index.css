@@ -25,3 +25,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.scaleup{
+  animation-name: scaleUp;
+  animation-duration:1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+ 
+}
+@keyframes scaleUp{
+  0%{
+    height: 75px;
+    width:75px;
+  }
+  50%{
+    height:50px;
+    width:50px;
+
+  }
+  100%{
+    height: 75px;
+    width: 75px;
+
+  }
+}

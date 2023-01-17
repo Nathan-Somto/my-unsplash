@@ -8,22 +8,31 @@ export interface IAppProps {}
 type stateObj = {
   first_name?: string;
   last_name?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  errors?: any;
+  username: string;
+  email: string;
+  password: string;
+  touched?: any;
 };
 export default function Register(props: IAppProps) {
+  // state object for the form
   const [formData, setFormData] = useState<stateObj>({
     first_name: "",
     last_name: "",
     username: "",
     email: "",
     password: "",
-    errors: {},
+    touched: {
+      first_name: false,
+      last_name: false,
+      username: false,
+      email: false,
+      password: false,
+    },
   });
+  // navigate hook to handle redirection
   const Navigate = useNavigate();
-  const currentUser: any = useContext(UserContext);
+
+  // handleChange function to handle input change
   let handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target) {
@@ -34,29 +43,48 @@ export default function Register(props: IAppProps) {
       });
     }
   };
+
   function handleRedirect(): void {
     Navigate("/");
-    console.log("clicked");
+  }
+  function handleBlur(e) {
+    const { name } = e.target;
+    setFormData({
+      ...formData,
+      touched: { ...formData.touched, [name]: true },
+    });
   }
   function validateForm() {
-    let errors: stateObj = {};
-    let formisValid = true;
-    if (!formData.username) {
-      formisValid = false;
+    let errors: stateObj = {
+      first_name: "",
+      last_name: "",
+      username: "",
+      email: "",
+      password: "",
+    };
+    if (formData.touched.first_name && !formData.first_name) {
+      errors["first_name"] = "please enter your first name";
+    }
+    if (formData.touched.last_name && !formData.last_name) {
+      errors["last_name"] = "please enter your last name";
+    }
+
+    if (formData.touched.username && !formData.username) {
       errors["username"] = "please enter your username";
     }
-    if (formData.username && formData.username.match(/^\w+$/)) {
-      formisValid = false;
+    /*else if (formData.touched.username && formData.username.match(/\w+/)) {
       errors["username"] = "please use alphanumeric characters only";
-    }
-    if (!formData.email) {
+    }*/
+    if (formData.touched.email && !formData.email) {
       errors["email"] = "please enter your email";
-      formisValid = false;
     }
-    if (!formData.password) {
-      errors["password"] = "please enter your email";
-      formisValid = false;
+    if (formData.touched.password && !formData.password) {
+      errors["password"] = "please enter your password";
+    } else if (formData.touched.password && formData.password.length < 8) {
+      errors["password"] = "the min length of password is 8";
+      /**include some regex for password */
     }
+    return errors;
   }
   const imageArr: string[] = [
     "https://images.unsplash.com/photo-1635683524916-07087440c829?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpY1mZWVkfDZ8eEh4WVRNSExnT2N8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
@@ -72,21 +100,26 @@ export default function Register(props: IAppProps) {
     "https://images.unsplash.com/photo-1511884642898-4c92249e20b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bGFuZHNjYXBlfGVufDB8MHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
     "https://images.unsplash.com/photo-1521336575822-6da63fb45455?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8MHwwfGJsYWNrfA%3D%3D&auto=format&fit=crop&w=500&q=60",
   ];
-  function handleSubmit(e:any){
+  async function handleSubmit(e: any) {
     e.preventDefault();
     // validate the form
-    authUser(formData,'login').then(data => {
-      if(data){
-      currentUser.setUser(data)
-      Navigate(`/profile/${data}`)
+    try {
+      const { first_name, last_name, username, email, password } = formData;
+      const userData = await authUser(
+        { first_name, last_name, username, email, password },
+        "register"
+      );
+      Navigate("/");
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        const { message } = err.response.data;
+        /*setError((message as unknown ) as any);
+       setLoading(false);
+      */
       }
-      Navigate('/register');
     }
-      ).catch(err => {
-        currentUser.setUser(err)
-        Navigate('/register');
-      });
   }
+  const { first_name, last_name, username, email, password } = validateForm();
   return (
     <div className="min-h-screen w-full flex items-center flex-col  md:flex-row">
       <div className=" w-full md:w-2/4">
@@ -159,7 +192,10 @@ export default function Register(props: IAppProps) {
             </Link>
           </h3>
         </div>
-        <form action="" className="text-left w-full max-w-md mx-auto md:mt-8 ">
+        <form
+          className="text-left w-full max-w-md mx-auto md:mt-8 "
+          onSubmit={handleSubmit}
+        >
           <div className="flex  ">
             <div className="mr-4 ">
               <label htmlFor="first_name" className="block mb-2">
@@ -170,12 +206,14 @@ export default function Register(props: IAppProps) {
                 id="first_name"
                 name={"first_name"}
                 onChange={handleChange}
-                disabled
-                className="peer p-2 w-full  rounded-md focus:invalid:border-red-500 invalid:text-red-500 border-black/50 focus:border-black border-solid border"
+                onBlur={handleBlur}
+                className={` p-2 w-full  rounded-md ${
+                  first_name
+                    ? "focus:border-red-500 border-red-600 text-red-500"
+                    : "border-black/50 focus:border-black"
+                } border-solid border`}
               />
-              <div className="peer-invaild:visible">
-                {formData.errors.username || "Please provide a vaild email"}
-              </div>
+              <small className="text-red-500">{first_name}</small>
             </div>
             <div>
               <label htmlFor="last_name" className="block mb-2">
@@ -186,8 +224,14 @@ export default function Register(props: IAppProps) {
                 id="last_name"
                 name={"last_name"}
                 onChange={handleChange}
-                className="p-2 w-full  rounded-md border-black/50 focus:border-black border-solid border"
+                onBlur={handleBlur}
+                className={` p-2 w-full  rounded-md ${
+                  last_name
+                    ? "focus:border-red-500 border-red-600 text-red-500"
+                    : "border-black/50 focus:border-black"
+                } border-solid border`}
               />
+              <small className="text-red-500">{last_name}</small>
             </div>
           </div>
           <div className="my-4 w-full">
@@ -199,8 +243,14 @@ export default function Register(props: IAppProps) {
               id="email"
               name={"email"}
               onChange={handleChange}
-              className="p-2 w-full border rounded-md border-black/50 focus:border-black border-solid border"
+              onBlur={handleBlur}
+              className={` p-2 w-full  rounded-md ${
+                email
+                  ? "focus:border-red-500 border-red-600 text-red-500"
+                  : "border-black/50 focus:border-black"
+              } border-solid border`}
             />
+            <small className="text-red-500">{email}</small>
           </div>
           <div className="my-4">
             <label htmlFor="username" className="block mb-2">
@@ -214,8 +264,14 @@ export default function Register(props: IAppProps) {
               id="username"
               name={"username"}
               onChange={handleChange}
-              className="p-2 w-full border-black/50  rounded-md focus:border-black border-solid border"
+              onBlur={handleBlur}
+              className={` p-2 w-full  rounded-md ${
+                username
+                  ? "focus:border-red-500 border-red-600 text-red-500"
+                  : "border-black/50 focus:border-black"
+              } border-solid border`}
             />
+            <small className="text-red-500">{username}</small>
           </div>
           <div className="my-4">
             <label htmlFor="password" className="block mb-2">
@@ -229,9 +285,14 @@ export default function Register(props: IAppProps) {
               id="password"
               name={"password"}
               onChange={handleChange}
-              className="p-2 w-full border-black/50  rounded-md focus:border-black border-solid border"
+              onBlur={handleBlur}
+              className={` p-2 w-full  rounded-md ${
+                password
+                  ? "focus:border-red-500 border-red-600 text-red-500"
+                  : "border-black/50 focus:border-black"
+              } border-solid border`}
             />
-            <div></div>
+            <small className="text-red-500">{password}</small>
           </div>
           <Button styles="w-full">{"Join"}</Button>
         </form>

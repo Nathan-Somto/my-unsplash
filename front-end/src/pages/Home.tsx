@@ -2,19 +2,24 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import getPhotos from "../services/getPhotos";
 import { useState, useEffect } from "react";
+import Loading from "../components/Loading";
 type Props = {};
 
 export default function Home({}: Props) {
   const [photo, setPhoto] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     getPhotos()
       .then((data) => setPhoto([...data.photo]))
       .catch((err) => setPhoto(false));
+      setTimeout(()=> setLoading(false),3000);
   }, []);
 
   return (
     <>
-      <Navbar />
+    {loading && <Loading/>}
+
+    { !loading &&<> <Navbar />
       <div className="w-full mt-14  columns-2 sm:columns-2 gap-4 lg:columns-3 ">
         {photo && (
           <div>
@@ -37,6 +42,7 @@ export default function Home({}: Props) {
           </div>
         )}
       </div>
+</>}
     </>
   );
 }
