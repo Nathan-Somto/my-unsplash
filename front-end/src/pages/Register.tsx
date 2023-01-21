@@ -34,6 +34,7 @@ export default function Register(props: IAppProps) {
 
   // handleChange function to handle input change
   let handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target) {
       setFormData({
@@ -54,6 +55,7 @@ export default function Register(props: IAppProps) {
       touched: { ...formData.touched, [name]: true },
     });
   }
+  
   function validateForm() {
     let errors: stateObj = {
       first_name: "",
