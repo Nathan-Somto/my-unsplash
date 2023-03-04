@@ -16,7 +16,7 @@ const Button = ({
   OnClick,
 }: Props) => {
   return (
-    <button className={"bg-black text-white py-3 mt-4 rounded-md " + styles} disabled={disabled} onClick={OnClick}>
+    <button className={"  py-3 mt-4 rounded-md " + styles} disabled={disabled} onClick={OnClick}>
       {children}
     </button>
   );

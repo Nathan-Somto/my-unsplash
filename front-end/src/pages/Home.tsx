@@ -1,17 +1,22 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar, { getPathname } from "../components/Navbar";
 import getPhotos from "../services/getPhotos";
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
+import Empty from "../components/Empty";
+import Footer from "../components/Footer";
 type Props = {};
 
 export default function Home({}: Props) {
   const [photo, setPhoto] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError]= useState<boolean>(false);
   useEffect(() => {
     getPhotos()
       .then((data) => setPhoto([...data.photo]))
-      .catch((err) => setPhoto(false));
+      .catch((err) => {
+
+        setError(true)});
       setTimeout(()=> setLoading(false),3000);
   }, []);
 
@@ -20,8 +25,9 @@ export default function Home({}: Props) {
     {loading && <Loading/>}
 
     { !loading &&<> <Navbar />
-      <div className="w-full mt-14  columns-2 sm:columns-2 gap-4 lg:columns-3 ">
+      {error&& <Empty location ={getPathname()}/>}
         {photo && (
+          <main className="w-full mt-14  columns-2 sm:columns-2 gap-4 lg:columns-3 ">
           <div>
             {photo.map((item: any, index: number) => (
               <figure
@@ -40,8 +46,9 @@ export default function Home({}: Props) {
               </figure>
             ))}
           </div>
+          </main>
         )}
-      </div>
+      <Footer/>
 </>}
     </>
   );

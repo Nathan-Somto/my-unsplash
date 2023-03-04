@@ -68,17 +68,24 @@ export default function login({}: Props): JSX.Element {
   async function handleSubmit(e: any) {
     e.preventDefault();
     // validate the form
-    setLoading(true);
+   
+   
     try {
+      setLoading(prevState=> !prevState);
+      console.log("set loading "+ loading);
       const { email, password } = formData;
       const username = await authUser({ email, password }, "login");
       Navigate("/");
     } catch (err) {
-      if (err.response && err.response.status === 400) {
-        const { message } = err.response.data;
+      if(err.response)
+      {
+          const { message } = err.response.data;
         setError(message as unknown as any);
-        setLoading(false);
       }
+       
+        setLoading(prevState=> !prevState);
+        console.log("set loading : "+loading)
+      
 
       //Navigate('/login');
       //setError((err as unknown ) as any);
@@ -159,7 +166,7 @@ export default function login({}: Props): JSX.Element {
                 />
                 <small className="text-red-500">{password}</small>
               </div>
-              <Button styles={" w-full "}>{"Login"}</Button>
+              <Button styles={" w-full bg-black text-white"}>{"Login"}</Button>
               <div className="mt-8 text-center">
                 Don't have an account?{" "}
                 <Link to={"/register"} className="underline text-black/50">

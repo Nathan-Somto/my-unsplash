@@ -19,8 +19,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height:auto;
+  min-height:100vh;
 }
-
+#root{
+  min-height:100vh;
+  height:100%;
+  position:relative;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -47,4 +53,19 @@ code {
     width: 75px;
 
   }
+}
+.debug{
+  border: 1px solid #000;
+}
+.hide{
+  display:none;
+}
+@media (min-width:1024px) {
+  .hide{
+    display: block;
+  }
+}
+.borderStuff{
+  border-top-right-radius: 0.85rem;
+  border-bottom-right-radius: 0.85rem;
 }

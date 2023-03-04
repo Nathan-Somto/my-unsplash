@@ -108,6 +108,9 @@ class userController {
     const {_doc}: any = updatedPhoto;
     res.json({ ..._doc});
   }
+  /**
+   * user_photo_delete: handles the deletion of  a particular user Photo
+   */
   async user_photo_delete(req: Request, res: Response) {
     let {username, photoId} = req.params;
     let userData =  await userModel.updateOne({username}, {
@@ -120,6 +123,53 @@ class userController {
     let username = req.params.username;
     const user = await userModel.findOne({ username }).select(['-email','-password']).populate('photos');
     res.json({ message: user });
+  }
+  /**
+   * getAllUsers - gets all the usernames and profile pics of everyone registered in the db. 
+   */
+   
+  async getAllUsers(req:Request, res:Response)
+  {
+   try{ let userData = await userModel.find({}).select({username:1, About:{avatar:1}});
+  }
+  catch(err){
+    res.status(400).json({message:"unable to find users"});
+  }
+    return;
+  }
+  async userInfo_update(req:Request, res:Response)
+  {
+    // the validation will be done on the client side
+    if(!req.body) return;
+  
+    const embeddedProperties ={'About':['location', 'bio','IgUsername', "linkedinUsername","twitterUsername"]};
+    const updatedObj ={};
+    Object.keys(req.body).forEach((key)=>{
+        
+        if(embeddedProperties['About'].indexOf(key) !== -1)
+        {
+         updatedObj['About'].key = req.body[key];
+        }
+        updatedObj.key = req.body[key];
+    });
+    if(typeof req.file !== 'undefined'){
+      updatedObj['About']['avatar'] = req.file?.filename;
+    }
+    const {username} = req.params;
+    let updatedUser = await userModel.updateOne({username}, {$set:{
+      updatedObj
+    }});
+    return;
+  }
+  async userDelete(req:Request, res:Response)
+  {
+    const {username} = req.params;
+    let userId = await userModel.findOne({username}).select('id');
+    let userPhotos = await photoModel.deleteMany({user:userId});
+    let userProfile = await userModel.deleteOne({username});
+    res.status(200).json({message:"Sucessfully deleted user account"})
+
+    return;
   }
 }
 

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import{motion} from 'framer-motion'
 import Button from "../components/Button";
 import authUser from "../services/authUser";
 export interface IAppProps {}
@@ -123,17 +124,21 @@ export default function Register(props: IAppProps) {
   }
   const { first_name, last_name, username, email, password } = validateForm();
   return (
-    <div className="min-h-screen w-full flex items-center flex-col  md:flex-row">
+    <div className="min-h-screen w-full flex items-center flex-col  md:flex-row overflow-x-hidden">
+      {/* desktop image on form */}
       <div className=" w-full md:w-2/4">
-        <div
-          className=" relative md:h-screen w-full object-cover max-h-screen hidden bg-cover bg-no-repeat  bg-center   md:block w-3/4"
+        <motion.div
+          initial ={{x: -500}}
+          animate={{x: 0}}
+          transition={{delay:0.3 ,type:'spring',duration:0.8, stiffness:70}}
+          className=" relative md:h-screen w-full object-cover max-h-screen hidden borderStuff bg-cover bg-no-repeat  bg-center   md:block w-3/4"
           style={{
             backgroundImage: `url( ${
               imageArr[Math.floor(Math.random() * imageArr.length)]
             })`,
           }}
         >
-          <div className="absolute top-0 left-0 bg-black/50 h-full w-full text-white text-center ">
+          <div className="absolute borderStuff top-0 left-0 bg-black/50 h-full w-full text-white text-center ">
             <div className="p-3 cursor-pointer" onClick={handleRedirect}>
               <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -147,14 +152,17 @@ export default function Register(props: IAppProps) {
               <h1 className="lg:text-4xl md:text-3xl font-bold mb-4 w-full">
                 Unlock your inner creativity
               </h1>
-              <p>
+              <p className="w-[80%] mx-auto">
                 join my unplash and access our ever growing collection of
                 images.
               </p>
             </div>
           </div>
-        </div>
-        <div
+        </motion.div>
+        <motion.div
+        initial={{y:-100}}
+        animate={{y:0}}
+        transition={{delay:0.3, stiffness:50, type:'spring'}}
           className="relative md:hidden block w-full h-64 bg-cover bg-no-repeat  bg-center min-h-fit"
           style={{
             backgroundImage: `url( ${
@@ -182,9 +190,13 @@ export default function Register(props: IAppProps) {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-      <div className="text-center flex md:w-2/4 max-w-md min-w-sm flex-col mt-2 lg:mt-0 ">
+      <motion.div 
+       initial={{y:1000}}
+       animate={{y:0}}
+       transition={{delay:0.6, duration:0.8, type:'spring'}}
+      className="text-center flex md:w-2/4 max-w-md min-w-sm flex-col mt-2 lg:mt-0 ">
         <div>
           <h1 className="font-bold text-4xl mb-2">Join My Unsplash</h1>
           <h3 className="text-lg font-normal">
@@ -194,7 +206,8 @@ export default function Register(props: IAppProps) {
             </Link>
           </h3>
         </div>
-        <form
+        <motion.form
+       
           className="text-left w-full max-w-md mx-auto md:mt-8 "
           onSubmit={handleSubmit}
         >
@@ -296,9 +309,9 @@ export default function Register(props: IAppProps) {
             />
             <small className="text-red-500">{password}</small>
           </div>
-          <Button styles="w-full">{"Join"}</Button>
-        </form>
-      </div>
+          <Button styles="w-full text-white bg-black">{"Join"}</Button>
+        </motion.form>
+      </motion.div>
     </div>
   );
 }

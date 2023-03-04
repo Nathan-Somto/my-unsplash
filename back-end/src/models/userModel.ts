@@ -1,14 +1,15 @@
 import {Schema, model, Types, SchemaType} from 'mongoose'; 
+import {IAbout , aboutSchema} from "./aboutModel";
 import jwt from "jsonwebtoken";
 interface IUser{
     first_name:string;
     last_name:string;
-    profile_pic?: string;
     username:string;
     email:string;
     password:string;
     joined: Date;
     photos: Types.ObjectId;
+    about:IAbout;
 }
 interface Itoken{
     id:Schema.Types.ObjectId,
@@ -32,8 +33,8 @@ let userSchema  =  new Schema<IUser>({
         [{
             type:Schema.Types.ObjectId,
             ref:'Photos'
-        }]
-
+        }],
+        about:aboutSchema
 });
 export function generateAuthToken (user:Itoken):string{
     return jwt.sign(

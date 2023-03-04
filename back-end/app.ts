@@ -4,10 +4,7 @@ dotenv.config({path: path.join(__dirname,'/.env')})
 import mongoose from "mongoose";
 import express from "express";
 import passport from "passport";
-import session from "express-session";
 import cors from "cors";
-import { userModel } from "./src/models/userModel";
-import { photoModel } from "./src/models/photoModel";
 import userRouter from './src/routes/user';
 import photoRouter from './src/routes/photo';
 import signUp from './src/routes/signUp';
@@ -23,14 +20,17 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(passport.initialize());
 
-
+// routes
 app.use("/api/signUp",signUp);
 app.use("/api/login",logIn);
 app.use("/api/user",userRouter);
 app.use("/api/photos",photoRouter);
+
+// catch all invalid route 
 app.use((req,res)=>{
     res.status(404).send("Invalid route");
 })
+
 app.listen(PORT,()=>{
     console.log("listening to requests");
 })
