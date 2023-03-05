@@ -5,6 +5,22 @@ import { IVerifyOptions, VerifyFunctionWithRequest } from "passport-local";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import { photoModel } from "../models/photoModel";
+type key = 'location' | 'bio' | 'IgUsername' | 'twitterUsername' | 'linkedinUsername';
+type About ={
+  avatar?:string;
+  location?:string;
+  bio?:string;
+  IgUsername?:string;
+  twitterUsername?:string;
+  linkedinUsername?:string;
+};
+type updatedObj ={
+  first_name?:string;
+  last_name?:string;
+  email?:string;
+  username?:string;
+  About?:About;
+}
 class userController {
   async getUser(req: Request, res: Response): Promise<any> {
     const { error } = this.validateLoginUser(req.body);
@@ -143,16 +159,24 @@ class userController {
     if(!req.body) return;
   
     const embeddedProperties ={'About':['location', 'bio','IgUsername', "linkedinUsername","twitterUsername"]};
-    const updatedObj ={};
+    const updatedObj:updatedObj ={}; // give this a type
     Object.keys(req.body).forEach((key)=>{
         
         if(embeddedProperties['About'].indexOf(key) !== -1)
         {
+          if(typeof  updatedObj['About'] === 'undefined')
+          {
+            updatedObj['About'] = {};
+          }
          updatedObj['About'].key = req.body[key];
         }
         updatedObj.key = req.body[key];
     });
     if(typeof req.file !== 'undefined'){
+      if(typeof  updatedObj['About'] === 'undefined')
+      {
+        updatedObj['About'] = {};
+      }
       updatedObj['About']['avatar'] = req.file?.filename;
     }
     const {username} = req.params;

@@ -69,3 +69,13 @@ code {
   border-top-right-radius: 0.85rem;
   border-bottom-right-radius: 0.85rem;
 }
+@media (min-width:768px){
+  .img-width{
+    width:45%;
+  }
+}
+@media(min-width:1000px){
+  .img-width{
+    width:50%;
+  }
+}

@@ -126,12 +126,12 @@ export default function Register(props: IAppProps) {
   return (
     <div className="min-h-screen w-full flex items-center flex-col  md:flex-row overflow-x-hidden">
       {/* desktop image on form */}
-      <div className=" w-full md:w-2/4">
+      <div className=" w-full img-width">
         <motion.div
           initial ={{x: -500}}
           animate={{x: 0}}
           transition={{delay:0.3 ,type:'spring',duration:0.8, stiffness:70}}
-          className=" relative md:h-screen w-full object-cover max-h-screen hidden borderStuff bg-cover bg-no-repeat  bg-center   md:block w-3/4"
+          className=" relative md:h-screen w-full object-cover max-h-screen hidden borderStuff bg-cover bg-no-repeat  bg-center   md:block w-full"
           style={{
             backgroundImage: `url( ${
               imageArr[Math.floor(Math.random() * imageArr.length)]
@@ -196,7 +196,7 @@ export default function Register(props: IAppProps) {
        initial={{y:1000}}
        animate={{y:0}}
        transition={{delay:0.6, duration:0.8, type:'spring'}}
-      className="text-center flex md:w-2/4 max-w-md min-w-sm flex-col mt-2 lg:mt-0 ">
+      className="text-center flex md:w-2/4 md:p-[1.1rem] mx-auto w-[80%] max-w-md min-w-sm flex-col mt-2 lg:mt-0 ">
         <div>
           <h1 className="font-bold text-4xl mb-2">Join My Unsplash</h1>
           <h3 className="text-lg font-normal">

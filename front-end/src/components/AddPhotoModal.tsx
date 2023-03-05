@@ -33,7 +33,7 @@ const AddPhotoModal = ({setModal}: Props) => {
     }
   }
   return (
-    <div className="fixed h-full top-[0] w-full bg-[rgba(0,0,0,0.85)] shadow-md z-1500000000">
+    <div className="fixed h-full top-[0] w-full bg-[rgba(0,0,0,0.85)] shadow-md z-[1500000000]">
       <motion.form
       initial={{position:'absolute',y:'500%',x:'500%',top:'500%', left:'500%',opacity:0}}
       animate={{position:'absolute',y:'-50%',x:'-50%',top:'50%',left:'50%',opacity:1}}

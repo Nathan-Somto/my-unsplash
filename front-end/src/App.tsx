@@ -7,7 +7,10 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ProtectedRoute from "./pages/ProtectedRoute";
 import "./App.css";
-
+type user ={
+  username:string;
+  email:string;
+}
 /**
  * plan have a logged in state
  * if user has been authenticated allow access to profile
@@ -18,14 +21,16 @@ function App() {
   const [user, setUser] = useState('');
   useEffect(()=>{
       const token = localStorage.getItem('token')
-      if(token){
-        const user:any = jwtdecode(token  as string);
-         setUser(user.username);
+      if(!token) return;
+        const loginUser:user = jwtdecode(token  as string);
         
         // decode the token 
         // set the user state to username
 
-      }
+      
+      if(!user) return;
+      const {username} = loginUser;
+      setUser(username);
       console.log(token);
     
   },[]);

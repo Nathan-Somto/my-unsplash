@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from "../assets/unsplash_logo.svg";
 type Props ={
     location:string;
 }
 function Empty({location}) {
     const [Message, setMessage] = useState('Oops! no photos at the moment');
-    const checkLocation = ()=>{
-        if(location === '/')
-        {
-            setMessage('Oops! no photos at the moment');
-            return;
-        }
+      
+    useEffect(() => {
+    
+      if(location === '/') return;
         setMessage('Make something awesome')
-    }
+     
+      return () => {
+      
+      }
+    }, [])
+    
   return (
     // for the profile page when there is no photo upload by a user or home page when there are no images
     <div className={`flex flex-col ${location !== '\\'? 'h-full':' '}`}>

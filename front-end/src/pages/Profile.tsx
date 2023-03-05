@@ -14,6 +14,7 @@ import {
 import { MdImagesearchRoller, MdLocationOn } from "react-icons/md";
 import { BiDownArrow, BiPencil } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
+import Empty from "../components/Empty";
 type Props = {};
 export interface Imodal {
   photoModal: boolean;
@@ -35,22 +36,23 @@ export default function Profile({}: Props) {
       {modal.photoModal && <PhotoModal setModal ={setModal}/>}
       {modal.deleteModal && <DeleteModal />}
       <Navbar openModal={setModal} />
-      <header className={"flex flex-col lg:flex-row w-full lg:items-center justify-center lg:mt-[1.2rem] lg:pb-[0.6rem] lg:pt-[1.2rem] lg:h-[300px]"}>
+      <header className={"flex flex-col lg:flex-row w-full lg:items-center justify-center lg:mt-[1.2rem] lg:pb-[0.6rem] lg:pt-[1.2rem] lg:h-[187px]"}>
         <div className="self-end">
           <Button
             type={"button"}
             styles={
-              "bg-white border border-solid  relative border-[rgba(100,100,100,0.5)] text-black px-5 py-[0.45rem] fw-200 d-block lg:hidden "
+              "bg-white border border-solid  relative  border-[rgba(100,100,100,0.5)] text-black pl-2 mr-2 pr-5 py-[0.45rem] fw-200 flex lg:hidden "
             }
             OnClick={() => handleAboutRedirect}
           >
-            <span className={"absolute left-[0] pr-2"}>
-              <BiPencil size={20} color={"rgba(100,100,100,0.5)"} />{" "}
+            <span className={""}>
+              <BiPencil size={20} color={"rgba(100,100,100,0.25)"} />{" "}
             </span>{" "}
-            Edit profile
+            <span> Edit profile</span>
+           
           </Button>
         </div>
-        <div className="pl-[0.75rem]  lg:h-[300px]">
+        <div className="pl-[0.75rem]  lg:h-[187px]">
           {/* User profile image */}
           <AiOutlineUser
             size={150}
@@ -60,7 +62,7 @@ export default function Profile({}: Props) {
           />
         </div>
 
-        <div className="flex flex-col justify-center pl-[2rem] mt-2 lg:h-[300px]  lg:justify-start lg:ml-[1.5rem]">
+        <div className="flex flex-col justify-center pl-[2rem] mt-2 lg:h-[187px]  lg:justify-start lg:ml-[1.5rem]">
          <div className="flex items-center">
           <h2 className="text-bold text-[2rem] mr-5">{"User Name"}</h2>
           <Button
@@ -136,6 +138,7 @@ export default function Profile({}: Props) {
         <section>
           <h3> <span><MdImagesearchRoller size={20} color={'black'}/></span> Photos</h3>
           <hr className="text-[rgba(110,110,110,0.5)]"/>
+          <Empty location={'/profile/:username'}/>
         </section>
       </main>
     </>
